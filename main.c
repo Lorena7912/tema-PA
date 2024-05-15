@@ -29,14 +29,19 @@ int main(int argc, char *argv[])
     Echipa *lista_echipe= citeste_echipele(&date,&nr_echipe);
     if(c[0]==1)
      Task1(&rezultate,lista_echipe);
-     /*for (Echipa *p=lista_Echipa;p!=NULL;p=p->next)
+     /*for (Echipa *p=lista_echipe;p!=NULL;p=p->next)
     { 
 
      printf("%s",p->nume_echipa);
      printf("%s %d\n",p->jucatori[2].nume,p->nr_jucatori);
      
     }*/
-
+    free(rezultate);
+    if (c[1]==1)
+      Task2(argv[3],&lista_echipe,&nr_echipe);
+    //printf("Buna!Am iesit din Task2\n");
+    free(rezultate);
+    free(lista_echipe); /// sau ceva de tip free_echipe()
     
     return 0;
 }
