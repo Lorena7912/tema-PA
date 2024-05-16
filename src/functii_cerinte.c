@@ -1,0 +1,117 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "../headers/tipuri_de_date.h"
+#include "../headers/functii_liste.h"
+#include "../headers/altele.h"
+#define LUNGIME_MAXIMA 50
+void eroare()
+{ /// revenit la aceasta functie
+  printf("Eroare");
+  exit(1);
+}
+
+Echipa *citeste_echipele(FILE **date, int *nr_echipe)
+{
+  Echipa *lista_echipe = NULL;
+  fscanf(*date, "%d", nr_echipe);
+  for (int i = 0; i < *nr_echipe; i++)
+  {
+    int nr_jucatori;
+    char nume_echipa[LUNGIME_MAXIMA];
+    fscanf(*date, "%d ", &nr_jucatori);
+    Jucator *aux = (Jucator *)malloc(nr_jucatori * sizeof(Jucator));
+    if (aux == NULL)
+    {
+      printf("4");
+      eroare();
+    }
+    fgets(nume_echipa, LUNGIME_MAXIMA, *date);
+    for (int j = 0; j < nr_jucatori; j++)
+    {
+      char linie[LUNGIME_MAXIMA];
+      aux[j].nume = (char *)malloc(LUNGIME_MAXIMA * sizeof(char));
+      aux[j].prenume = (char *)malloc(LUNGIME_MAXIMA * sizeof(char));
+      if (aux[j].nume == NULL || aux[j].prenume == NULL)
+      {
+        printf("5");
+        eroare();
+      }
+      fscanf(*date, "%s ", aux[j].nume);
+      fscanf(*date, "%s ", aux[j].prenume);
+      fscanf(*date, "%d", &aux[j].puncte);
+      /*getc(*date);*/
+    }
+    getc(*date); // posibil bug: numele echipelor au la sfarsit '\n'
+
+    addAtBeginning(&lista_echipe, nume_echipa, nr_jucatori, 0.0, aux);
+    free(aux); // momentan; plan:creezi o functie care elibereaza spatiul pentru tot, inclusiv memoria alocata pentru nume si prenume;
+  }
+  return lista_echipe;
+}
+
+void Task1(char *argv, Echipa *lista_echipe)
+{
+  FILE *rezultate = fopen(argv, "wt");
+  if (rezultate == NULL)
+    eroare();
+  for (Echipa *p = lista_echipe; p != NULL; p = p->next)
+  {
+    p->nume_echipa[strlen(p->nume_echipa) - 1] ='\0';
+    fprintf(rezultate, "%s\n", p->nume_echipa);
+  }
+  fclose(rezultate);
+}
+float punctaj_minim(Echipa *lista_echipe, int nr_echipe)
+{
+  float min1 = lista_echipe->punctaj_total;
+  Echipa *p = lista_echipe;
+  for (int i = 0; i < nr_echipe; i++)
+  {
+    if (min1 > p->punctaj_total)
+      min1 = p->punctaj_total;
+    p = p->next;
+  }
+  return min1;
+}
+int putere2_max(int nr_echipe)
+{
+  int p2_max = 1;
+  while (p2_max * 2 <= nr_echipe)
+    p2_max = p2_max * 2;
+  return p2_max;
+}
+
+void punctaj_total(Echipa **lista_echipa)
+{
+  for (Echipa *p = *lista_echipa; p != NULL; p = p->next)
+  {
+    for (int i = 0; i < p->nr_jucatori; i++)
+      p->punctaj_total += p->jucatori[i].puncte;
+    p->punctaj_total /= p->nr_jucatori;
+  }
+}
+
+void Task2(char *argv, Echipa **lista_echipa, int *nr_echipe)
+{
+  FILE *rezultate = fopen(argv, "wt");
+  if (rezultate == NULL)
+    eroare();
+  punctaj_total(lista_echipa);
+  int nr_ramase = putere2_max(*nr_echipe);
+  while (*nr_echipe > nr_ramase)
+  {
+    float min1 = punctaj_minim(*lista_echipa, *nr_echipe);
+    eliminare_echipa(lista_echipa, min1);
+    (*nr_echipe)--;
+  }
+ 
+
+  for (Echipa *p = *lista_echipa; p != NULL; p = p->next)
+  { 
+    fprintf(rezultate,"%s\n", p->nume_echipa);
+    
+  }
+  fclose(rezultate); ///foarte important!
+
+}
