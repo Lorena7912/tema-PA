@@ -152,9 +152,6 @@ void meciuri(FILE **rezultate, Queue *q, Echipa **castigatori, Echipa **invinsi,
 
 void Task3(char *argv, Echipa *lista_echipe, int nr_echipe, Echipa **ultimele8)
 {
-  FILE *rezultate = fopen(argv, "at");
-  if (rezultate == NULL)
-    eroare();
   Queue *q = createQueue();
   Echipa *invinsi = NULL;
   Echipa *castigatori = NULL;
@@ -162,33 +159,38 @@ void Task3(char *argv, Echipa *lista_echipe, int nr_echipe, Echipa **ultimele8)
     enQueue(q, p);
   /*for (Echipa *p=q->front;p!=NULL;p=p->next)
    printf("%s\n",p->nume_echipa);*/
-  
+  printf("buna!3");
   int cnt_runda = 1;
   while (nr_echipe > 1)
   {
+    FILE *rezultate = fopen(argv, "at");
+    if (rezultate == NULL)
+      eroare();
     fprintf(rezultate, "Runda: %d", cnt_runda);
     meciuri(&rezultate, q, &castigatori, &invinsi, nr_echipe);
+    printf("buna!2");
     deleteStack(&invinsi);
     nr_echipe = nr_echipe / 2;
     ///---afisarea
-    fprintf(rezultate,"---WINNERS OF ROUND NO:%d:\n", cnt_runda);
+    fprintf(rezultate, "---WINNERS OF ROUND NO:%d:\n", cnt_runda);
     int i = 0;
-    Echipa *copie =castigatori;
+    Echipa *copie = castigatori;
     while (i < nr_echipe)
     {
       fprintf(rezultate, "%s -%f\n", copie->nume_echipa, copie->punctaj_total);
       if (nr_echipe == TOP_FINAL)
-       addAtBeginning(ultimele8,copie->nume_echipa,copie->nr_jucatori,copie->punctaj_total,copie->jucatori);
+        addAtBeginning(ultimele8, copie->nume_echipa, copie->nr_jucatori, copie->punctaj_total, copie->jucatori);
       copie = copie->next;
       i++;
     }
-    ///partea in care dai enQueue inapoi
+    /// partea in care dai enQueue inapoi
+    printf("buna!");
     for (int i = 0; i < nr_echipe; i++)
-    {  Echipa *aux=pop(&castigatori);
-        enQueue(q, aux);
+    {
+      Echipa *aux = pop(&castigatori);
+      enQueue(q, aux);
     }
-
+    free(rezultate);
     cnt_runda++;
   }
-  fclose(rezultate);
 }

@@ -37,7 +37,6 @@ int main(int argc, char *argv[])
         Task1(argv[3], lista_echipe);
     if (c[1] == 1)
         Task2(argv[3], &lista_echipe, &nr_echipe);
-    Queue *q = createQueue();
     Echipa *ultimele8;
     if (c[2] == 1)
         Task3(argv[3], lista_echipe, nr_echipe, &ultimele8);
