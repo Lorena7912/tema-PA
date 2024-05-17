@@ -41,11 +41,6 @@ int main(int argc, char *argv[])
     /*if(c[2]==1)
         Task2(argv[3],&q,&nr_echipe);
     */
-   enQueue(q,lista_echipe);
-   enQueue(q,lista_echipe->next);
-   enQueue(q,(lista_echipe->next)->next);
-   for (Echipa *p=q->front;p!=NULL;p=p->next)
-   printf("%s\n",p->nume_echipa);
-
-    return 0;
+   
+   return 0;
 }

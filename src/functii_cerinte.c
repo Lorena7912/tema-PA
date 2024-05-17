@@ -117,6 +117,6 @@ void Task2(char *argv, Echipa **lista_echipa, int *nr_echipe)
 }
 
 void Task3(char *)
-{
+{ 
   printf("Buna!");
 }
