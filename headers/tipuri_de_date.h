@@ -1,5 +1,6 @@
 typedef struct Jucator Jucator;
 typedef struct Echipa Echipa;
+typedef struct Queue Queue;
 
 struct  Jucator
 {
@@ -15,4 +16,9 @@ struct Echipa
    float punctaj_total;
    Jucator *jucatori;
    struct Echipa *next;
+};
+
+struct Queue
+{
+    struct Echipa *front, *rear;
 };

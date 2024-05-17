@@ -4,6 +4,7 @@
 #include "./headers/functii_cerinte.h"
 #include "./headers/functii_liste.h"
 #include "./headers/altele.h"
+#include "./headers/functii_cozi.h"
 #define NR_CERINTE 5
 int main(int argc, char *argv[])
 {
@@ -36,6 +37,15 @@ int main(int argc, char *argv[])
         Task1(argv[3], lista_echipe);
     if (c[1] == 1)
         Task2(argv[3],&lista_echipe,&nr_echipe);
+    Queue *q=createQueue();
+    /*if(c[2]==1)
+        Task2(argv[3],&q,&nr_echipe);
+    */
+   enQueue(q,lista_echipe);
+   enQueue(q,lista_echipe->next);
+   enQueue(q,(lista_echipe->next)->next);
+   for (Echipa *p=q->front;p!=NULL;p=p->next)
+   printf("%s\n",p->nume_echipa);
 
     return 0;
 }

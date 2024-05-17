@@ -7,7 +7,7 @@
 void addAtBeginning(Echipa **lista_echipe,char nume_echipa[],int nr_jucatori,int punctaj,Jucator *aux)
 { Echipa *newNode=(Echipa *)malloc(sizeof(Echipa));
 
-  newNode->nume_echipa=(char*)malloc(strlen(nume_echipa)*sizeof(char));
+  newNode->nume_echipa=(char*)malloc(LUNGIME_MAXIMA*sizeof(char));
   strcpy(newNode->nume_echipa,nume_echipa);
   newNode->nr_jucatori=nr_jucatori;
   newNode->punctaj_total=punctaj;
