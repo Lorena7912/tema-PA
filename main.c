@@ -42,5 +42,14 @@ int main(int argc, char *argv[])
         Task2(argv[3],&q,&nr_echipe);
     */
    
+   enQueue(q,lista_echipe);
+   enQueue(q,lista_echipe->next);
+   
+   enQueue(q,(lista_echipe->next)->next);
+   enQueue(q,((lista_echipe->next)->next)->next);
+   
+   Echipa *echipa1=deQueue(q),*echipa2=deQueue(q);
+   
+
    return 0;
 }

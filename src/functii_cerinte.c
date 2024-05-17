@@ -3,8 +3,10 @@
 #include <string.h>
 #include "../headers/tipuri_de_date.h"
 #include "../headers/functii_liste.h"
+#include "../headers/functii_cozi.h"
 #include "../headers/altele.h"
 #define LUNGIME_MAXIMA 50
+#define LUNGIME_LINIE 67
 void eroare()
 { /// revenit la aceasta functie
   printf("Eroare");
@@ -57,7 +59,7 @@ void Task1(char *argv, Echipa *lista_echipe)
     eroare();
   for (Echipa *p = lista_echipe; p != NULL; p = p->next)
   {
-    p->nume_echipa[strlen(p->nume_echipa) - 1] ='\0';
+    p->nume_echipa[strlen(p->nume_echipa) - 1] = '\0';
     fprintf(rezultate, "%s\n", p->nume_echipa);
   }
   fclose(rezultate);
@@ -105,18 +107,64 @@ void Task2(char *argv, Echipa **lista_echipa, int *nr_echipe)
     eliminare_echipa(lista_echipa, min1);
     (*nr_echipe)--;
   }
- 
 
   for (Echipa *p = *lista_echipa; p != NULL; p = p->next)
-  { 
-    fprintf(rezultate,"%s\n", p->nume_echipa);
-    
+  {
+    fprintf(rezultate, "%s\n", p->nume_echipa);
   }
-  fclose(rezultate); ///foarte important!
-
+  fclose(rezultate); /// foarte important!
+}
+void spatii(FILE **rezultate, int nr)
+{
+  for (int i = 0; i < nr; i++)
+    fprintf(*rezultate, " ");
+}
+void meciuri(FILE **rezultate, Queue *q, Echipa **castigatori, Echipa **invinsi, int nr_echipe)
+{
+  Echipa *echipa1;
+  Echipa *echipa2;
+  for (int i = 0; i < nr_echipe / 2; i++)
+  {
+    echipa1 = deQueue(q);
+    echipa2 = deQueue(q);
+    /// verifica daca mai exista vreun spatiu la sfarsit si daca exista, elimina-l!
+    fprintf(*rezultate, "%s - %s\n", echipa1->nume_echipa, echipa2->nume_echipa); /// de revenit aici
+    if (echipa1->punctaj_total > echipa2->punctaj_total || echipa1->punctaj_total == echipa2->punctaj_total)
+    {
+      echipa1->punctaj_total += 1.0;
+      creeaza_stiva(castigatori,echipa1);
+    }
+    else
+    {
+      echipa2->punctaj_total += 1.0;
+      creeaza_stiva(invinsi,echipa2);
+    }
+  }
 }
 
-void Task3(char *)
-{ 
-  printf("Buna!");
-}
+/*void Task3(char *argv,Echipa *lista_echipe /*nu stiu inca cum transmit lista_echipe,Echipa **ultimele8, int nr_echipe)
+//nu mai avem nevoie sa modificam nr de echipe, nu mai folosim
+{
+Queue *Q=createQueue();
+Echipa *invinsi=NULL;
+Echipa *castigatori=NULL;
+
+for (Echipa *p=lista_echipe;p!=NULL;p=p->next)
+  enQueue(&Q,p);
+int cnt_runda=1;
+while (nr_echipe>1)
+{ FILE *f=fopen(argv,"at"); //adaugam in continuarea fisierului
+  Echipa *echipa1, *echipa2;
+ meciuri( );
+  ---Round %d :
+---afisam tabelat
+afisare ( );
+nr_echipe=nr_echipe/2;
+ elim_din_stiva( );
+ for (int i=0;i<nr_echipe;i++)
+  enQueue(...);
+ if (nr_echipe==8)
+  for (int i=0;i<nr_echipe;i++)
+  addAtBeginning(ultimele8);
+cnt_runda++;
+}*/

@@ -1,5 +1,8 @@
 #include "../headers/tipuri_de_date.h"
 #include <stdio.h>
+#include <string.h>
+#include "../headers/functii_cozi.h"
+#define LUNGIME_LINIE 67
 void afisare_echipe (Echipa *lista_echipa,int nr)
 { Echipa *p=lista_echipa;
   for (int i=0;p!=NULL&&i<nr;i++) ///p!=NULL pentru a se opri in cazul in care se apeleaza un nr > nr_echipe
@@ -15,3 +18,4 @@ void afisare_echipe (Echipa *lista_echipa,int nr)
     }
 
 }
+
