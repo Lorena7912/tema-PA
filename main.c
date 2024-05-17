@@ -41,6 +41,6 @@ int main(int argc, char *argv[])
     Echipa *ultimele8;
     if (c[2] == 1)
         Task3(argv[3], lista_echipe, nr_echipe, &ultimele8);
-
+    
     return 0;
 }

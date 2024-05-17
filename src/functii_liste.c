@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #define LUNGIME_MAXIMA 50
-void addAtBeginning(Echipa **lista_echipe,char nume_echipa[],int nr_jucatori,int punctaj,Jucator *aux)
+void addAtBeginning(Echipa **lista_echipe,char nume_echipa[],int nr_jucatori,float punctaj,Jucator *aux)
 { Echipa *newNode=(Echipa *)malloc(sizeof(Echipa));
 
   newNode->nume_echipa=(char*)malloc(LUNGIME_MAXIMA*sizeof(char));
