@@ -36,20 +36,11 @@ int main(int argc, char *argv[])
     if (c[0] == 1)
         Task1(argv[3], lista_echipe);
     if (c[1] == 1)
-        Task2(argv[3],&lista_echipe,&nr_echipe);
-    Queue *q=createQueue();
-    /*if(c[2]==1)
-        Task2(argv[3],&q,&nr_echipe);
-    */
-   
-   enQueue(q,lista_echipe);
-   enQueue(q,lista_echipe->next);
-   
-   enQueue(q,(lista_echipe->next)->next);
-   enQueue(q,((lista_echipe->next)->next)->next);
-   
-   Echipa *echipa1=deQueue(q),*echipa2=deQueue(q);
-   
+        Task2(argv[3], &lista_echipe, &nr_echipe);
+    Queue *q = createQueue();
+    Echipa *ultimele8;
+    if (c[2] == 1)
+        Task3(argv[3], lista_echipe, nr_echipe, &ultimele8);
 
-   return 0;
+    return 0;
 }

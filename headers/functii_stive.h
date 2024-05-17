@@ -1,0 +1,1 @@
+void push(Echipa **,Echipa *);

@@ -61,5 +61,6 @@ Echipa *deQueue(Queue *q) ///verificata
 
     q->front=(q->front)->next;
     free(aux);
+    return val;
 
 }

@@ -5,8 +5,9 @@
 #include "../headers/functii_liste.h"
 #include "../headers/functii_cozi.h"
 #include "../headers/altele.h"
+#include "../headers/functii_stive.h"
 #define LUNGIME_MAXIMA 50
-#define LUNGIME_LINIE 67
+
 void eroare()
 { /// revenit la aceasta functie
   printf("Eroare");
@@ -119,7 +120,7 @@ void spatii(FILE **rezultate, int nr)
   for (int i = 0; i < nr; i++)
     fprintf(*rezultate, " ");
 }
-void meciuri(FILE **rezultate, Queue *q, Echipa **castigatori, Echipa **invinsi, int nr_echipe)
+void meciuri(FILE **rezultate, Queue *q, Echipa **castigatori, Echipa **invinsi, int nr_echipe)  ///pare sa  mearga(mai putin afisarea si eliminarea spatiilor)
 {
   Echipa *echipa1;
   Echipa *echipa2;
@@ -128,16 +129,22 @@ void meciuri(FILE **rezultate, Queue *q, Echipa **castigatori, Echipa **invinsi,
     echipa1 = deQueue(q);
     echipa2 = deQueue(q);
     /// verifica daca mai exista vreun spatiu la sfarsit si daca exista, elimina-l!
+    if (echipa1->nume_echipa[strlen(echipa1->nume_echipa) - 1] == ' ') ///'\n' a fost eliminat in Task1
+      echipa1->nume_echipa[strlen(echipa1->nume_echipa) - 1] = '\0';
+
+    if (echipa2->nume_echipa[strlen(echipa2->nume_echipa) - 1] == ' ') ///'\n' a fost eliminat in Task1
+      echipa2->nume_echipa[strlen(echipa2->nume_echipa) - 1] = '\0';
+
     fprintf(*rezultate, "%s - %s\n", echipa1->nume_echipa, echipa2->nume_echipa); /// de revenit aici
     if (echipa1->punctaj_total > echipa2->punctaj_total || echipa1->punctaj_total == echipa2->punctaj_total)
     {
       echipa1->punctaj_total += 1.0;
-      creeaza_stiva(castigatori,echipa1);
+      push(castigatori, echipa1);
     }
     else
     {
       echipa2->punctaj_total += 1.0;
-      creeaza_stiva(invinsi,echipa2);
+      push(invinsi, echipa2); // invinsi/castigatori sunt de de tip Echipa **
     }
   }
 }
@@ -168,3 +175,19 @@ nr_echipe=nr_echipe/2;
   addAtBeginning(ultimele8);
 cnt_runda++;
 }*/
+void Task3(char *argv, Echipa *lista_echipe, int nr_echipe, Echipa **ultimele8)
+{ 
+  FILE *rezultate = fopen(argv, "at");
+  if (rezultate == NULL)
+    eroare();
+  Queue *q = createQueue();
+  Echipa *invinsi = NULL;
+  Echipa *castigatori = NULL;
+  for (Echipa *p=lista_echipe;p!=NULL;p=p->next)
+    enQueue(q,p);
+  /*for (Echipa *p=q->front;p!=NULL;p=p->next)
+   printf("%s\n",p->nume_echipa);
+  */
+  
+  fclose(rezultate);
+}
