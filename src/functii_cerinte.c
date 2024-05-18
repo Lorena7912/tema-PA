@@ -130,94 +130,76 @@ void meciuri(FILE **rezultate, Queue *q, Echipa **castigatori, Echipa **invinsi,
     echipa1 = deQueue(q);
     echipa2 = deQueue(q);
     /// verifica daca mai exista vreun spatiu la sfarsit si daca exista, elimina-l!
-   /**if (echipa1->nume_echipa[strlen(echipa1->nume_echipa) - 1] == ' ') ///'\n' a fost eliminat in Task1
+    if (echipa1->nume_echipa[strlen(echipa1->nume_echipa) - 1] == ' ') ///'\n' a fost eliminat in Task1
       echipa1->nume_echipa[strlen(echipa1->nume_echipa) - 1] = '\0';
 
     if (echipa2->nume_echipa[strlen(echipa2->nume_echipa) - 1] == ' ') ///'\n' a fost eliminat in Task1
       echipa2->nume_echipa[strlen(echipa2->nume_echipa) - 1] = '\0';
-*/
+
     fprintf(*rezultate, "%s - %s\n", echipa1->nume_echipa, echipa2->nume_echipa); /// de revenit aici ///Afisarea
 
-    if (echipa1->punctaj_total > echipa2->punctaj_total || fabs(echipa1->punctaj_total-echipa2->punctaj_total)<0.001)
+    if (echipa1->punctaj_total > echipa2->punctaj_total)
     {
       echipa1->punctaj_total += 1.0;
       push(castigatori, echipa1);
+      push(invinsi, echipa2);
     }
     else
     {
-      
-      push(invinsi, echipa2); // invinsi/castigatori sunt de de tip Echipa **
+      echipa2->punctaj_total += 1.0;
+      push(castigatori, echipa2);
+      push(invinsi, echipa1);
     }
   }
 }
 
 void Task3(char *argv, Echipa *lista_echipe, int nr_echipe, Echipa **ultimele8)
-{ FILE *rezultate = fopen(argv, "at");
-printf("salut!");
-    if (rezultate == NULL)
-      eroare();
+{
+  FILE *rezultate = fopen(argv, "at");
+
+  if (rezultate == NULL)
+    eroare();
   Queue *q = createQueue();
   Echipa *invinsi = NULL;
   Echipa *castigatori = NULL;
   for (Echipa *p = lista_echipe; p != NULL; p = p->next)
-    {enQueue(q, p);
-     printf("buna!");
-    }
-  for (Echipa *p=q->front;p!=NULL;p=p->next)
-   printf("%s\n",p->nume_echipa);
-   ///pana aici e ok, functioneaza
-   ///de aici nu mai functioneaza
+  {
+    enQueue(q, p);
+  }
+  /// pana aici e ok, functioneaza
+  /// de aici nu mai functioneaza
   int cnt_runda = 1;
   while (nr_echipe > 1)
   {
-    printf("Nr echipe: %d\n",nr_echipe);
-    fprintf(rezultate, "Runda: %d", cnt_runda);
+
+    fprintf(rezultate, "---Round %d:\n", cnt_runda);
     meciuri(&rezultate, q, &castigatori, &invinsi, nr_echipe);
-    printf("buna!2");
-    if(invinsi==NULL)
-    printf("Stiva de invinsi este NULL!"); ///Stiva INVINSI NU ESTE NULL dupa apelul functiei meciuri
-    else 
-    for (Echipa *p=invinsi;p!=NULL;p=p->next) 
-    printf("I: %s\n",p->nume_echipa); ///dar de ce imi afiseaza doar 11, cand ar trebui sa fie 16
-    if (castigatori==NULL)
-    printf("Stiva de castigatori este NULL!"); 
-    else
-    for (Echipa *p=castigatori;p!=NULL;p=p->next)
-    printf("C: %s\n",p->nume_echipa); ///Stiva CASTIGATORI NU ESTE NULL dupa apelul functiei meciuri
-    ///dar de ce imi afiseaza doar 5, cand ar trebui sa fie 16;
     deleteStack(&invinsi);
     nr_echipe = nr_echipe / 2;
     ///---afisarea
     fprintf(rezultate, "---WINNERS OF ROUND NO:%d:\n", cnt_runda);
     int i = 0;
     Echipa *copie = castigatori;
-    while (i < nr_echipe)
-    {  
-        if (copie==NULL)
-          {printf("\n%d %d\n",cnt_runda,nr_echipe);
-          exit(100);
-          }
-      fprintf(rezultate, "%s -%f\n", copie->nume_echipa, copie->punctaj_total); ///bug: atunci cand nr_echipe devine 16 
-      ///(prima runda) in test7 copie este NULL, ceea ce cauzeaza atunci cand se incearca accesarea membrilor 
-      ///SEGMENTATION FAULT 
-      ///copie nu ar trebui sa fie NULL, deoarece asta inseamna ca stiva de castigatori este NULL...
-      ///ceea ce indica posibile probleme cu punerea in stive, trasmitere a parametrilor...dar stivele INVINSI si CASTIGATORI
-      ///NU SUNT NULL dupa iesirea din functia meciuri (care, de altfel, nu face bine castigatorii,chiar daca compara echipele
-      ///care trebuie) 
-      ///(chiar daca nu au in total 16 cu 16 elemente, alt bug...)
-     /*if (nr_echipe == TOP_FINAL)
-        addAtBeginning(ultimele8, copie->nume_echipa, copie->nr_jucatori, copie->punctaj_total, copie->jucatori);*/
+    while (i < nr_echipe) ///bug vechi SEGMENTATION FAULT
+    {
+      if (copie == NULL)
+      {
+        exit(100);
+      }
+      fprintf(rezultate, "%s -%f\n", copie->nume_echipa, copie->punctaj_total); 
+      /*if (nr_echipe == TOP_FINAL)
+         addAtBeginning(ultimele8, copie->nume_echipa, copie->nr_jucatori, copie->punctaj_total, copie->jucatori);*/
       copie = copie->next;
       i++;
     }
-    /// partea in care dai enQueue inapoi
-    printf("buna!");
+    
+
     for (int i = 0; i < nr_echipe; i++)
     {
       Echipa *aux = pop(&castigatori);
       enQueue(q, aux);
     }
-    
+
     cnt_runda++;
   }
   fclose(rezultate);

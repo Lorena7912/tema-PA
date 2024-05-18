@@ -19,3 +19,4 @@ void afisare_echipe (Echipa *lista_echipa,int nr)
 
 }
 
+
