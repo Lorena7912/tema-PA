@@ -6,6 +6,7 @@
 #include "../headers/functii_cozi.h"
 #include "../headers/altele.h"
 #include "../headers/functii_stive.h"
+#include <math.h>
 #define LUNGIME_MAXIMA 50
 #define TOP_FINAL 8
 void eroare()
@@ -137,14 +138,14 @@ void meciuri(FILE **rezultate, Queue *q, Echipa **castigatori, Echipa **invinsi,
 */
     fprintf(*rezultate, "%s - %s\n", echipa1->nume_echipa, echipa2->nume_echipa); /// de revenit aici ///Afisarea
 
-    if (echipa1->punctaj_total > echipa2->punctaj_total || echipa1->punctaj_total == echipa2->punctaj_total)
+    if (echipa1->punctaj_total > echipa2->punctaj_total || fabs(echipa1->punctaj_total-echipa2->punctaj_total)<0.001)
     {
       echipa1->punctaj_total += 1.0;
       push(castigatori, echipa1);
     }
     else
     {
-      echipa2->punctaj_total += 1.0;
+      
       push(invinsi, echipa2); // invinsi/castigatori sunt de de tip Echipa **
     }
   }
@@ -169,10 +170,21 @@ printf("salut!");
   int cnt_runda = 1;
   while (nr_echipe > 1)
   {
-    
+    printf("Nr echipe: %d\n",nr_echipe);
     fprintf(rezultate, "Runda: %d", cnt_runda);
     meciuri(&rezultate, q, &castigatori, &invinsi, nr_echipe);
     printf("buna!2");
+    if(invinsi==NULL)
+    printf("Stiva de invinsi este NULL!"); ///Stiva INVINSI NU ESTE NULL dupa apelul functiei meciuri
+    else 
+    for (Echipa *p=invinsi;p!=NULL;p=p->next) 
+    printf("I: %s\n",p->nume_echipa); ///dar de ce imi afiseaza doar 11, cand ar trebui sa fie 16
+    if (castigatori==NULL)
+    printf("Stiva de castigatori este NULL!"); 
+    else
+    for (Echipa *p=castigatori;p!=NULL;p=p->next)
+    printf("C: %s\n",p->nume_echipa); ///Stiva CASTIGATORI NU ESTE NULL dupa apelul functiei meciuri
+    ///dar de ce imi afiseaza doar 5, cand ar trebui sa fie 16;
     deleteStack(&invinsi);
     nr_echipe = nr_echipe / 2;
     ///---afisarea
@@ -180,8 +192,19 @@ printf("salut!");
     int i = 0;
     Echipa *copie = castigatori;
     while (i < nr_echipe)
-    {
-      fprintf(rezultate, "%s -%f\n", copie->nume_echipa, copie->punctaj_total);
+    {  
+        if (copie==NULL)
+          {printf("\n%d %d\n",cnt_runda,nr_echipe);
+          exit(100);
+          }
+      fprintf(rezultate, "%s -%f\n", copie->nume_echipa, copie->punctaj_total); ///bug: atunci cand nr_echipe devine 16 
+      ///(prima runda) in test7 copie este NULL, ceea ce cauzeaza atunci cand se incearca accesarea membrilor 
+      ///SEGMENTATION FAULT 
+      ///copie nu ar trebui sa fie NULL, deoarece asta inseamna ca stiva de castigatori este NULL...
+      ///ceea ce indica posibile probleme cu punerea in stive, trasmitere a parametrilor...dar stivele INVINSI si CASTIGATORI
+      ///NU SUNT NULL dupa iesirea din functia meciuri (care, de altfel, nu face bine castigatorii,chiar daca compara echipele
+      ///care trebuie) 
+      ///(chiar daca nu au in total 16 cu 16 elemente, alt bug...)
      /*if (nr_echipe == TOP_FINAL)
         addAtBeginning(ultimele8, copie->nume_echipa, copie->nr_jucatori, copie->punctaj_total, copie->jucatori);*/
       copie = copie->next;
