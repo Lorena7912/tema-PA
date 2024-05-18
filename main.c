@@ -8,8 +8,7 @@
 #define NR_CERINTE 5
 int main(int argc, char *argv[])
 {
-    FILE *cerinte, *date, *rezultate;
-    // de facut functie separata pentru deschiderea cerinte si date
+    FILE *cerinte, *date;
     cerinte = fopen(argv[1], "rt");
     if (cerinte == NULL)
     {
@@ -20,12 +19,6 @@ int main(int argc, char *argv[])
     if (date == NULL)
     {
         printf("2");
-        eroare();
-    }
-    rezultate = fopen(argv[3], "wt");
-    if (rezultate == NULL)
-    {
-        printf("3");
         eroare();
     }
     int c[NR_CERINTE];
@@ -40,6 +33,5 @@ int main(int argc, char *argv[])
     Echipa *ultimele8=NULL;
     if (c[2] == 1)
         Task3(argv[3], lista_echipe, nr_echipe, &ultimele8);
-    
     return 0;
 }

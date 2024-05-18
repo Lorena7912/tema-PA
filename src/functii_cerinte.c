@@ -14,7 +14,16 @@ void eroare()
   printf("Eroare");
   exit(1);
 }
-
+void elim_c(char *s)
+{
+  int i = strlen(s);
+  i--;
+  while ((s[i] == ' ' || s[i]=='\n') &&i >= 0)
+  {
+    s[i]='\0';
+    i--;
+  }
+}
 Echipa *citeste_echipele(FILE **date, int *nr_echipe)
 {
   Echipa *lista_echipe = NULL;
@@ -31,6 +40,7 @@ Echipa *citeste_echipele(FILE **date, int *nr_echipe)
       eroare();
     }
     fgets(nume_echipa, LUNGIME_MAXIMA, *date);
+    elim_c(nume_echipa);///! linie importanta!
     for (int j = 0; j < nr_jucatori; j++)
     {
       char linie[LUNGIME_MAXIMA];
@@ -61,7 +71,8 @@ void Task1(char *argv, Echipa *lista_echipe)
     eroare();
   for (Echipa *p = lista_echipe; p != NULL; p = p->next)
   {
-    p->nume_echipa[strlen(p->nume_echipa) - 1] = '\0';
+    /*p->nume_echipa[strlen(p->nume_echipa) - 1] = '\0';*/ ///!sa nu fie stearsa!!!! duce la picarea tuturor testelor prin neafisarea corecta!*/
+    /*elim_c(p->nume_echipa);///sau cu aceasta functie*/
     fprintf(rezultate, "%s\n", p->nume_echipa);
   }
   fclose(rezultate);
@@ -116,11 +127,7 @@ void Task2(char *argv, Echipa **lista_echipa, int *nr_echipe)
   }
   fclose(rezultate); /// foarte important!
 }
-void spatii(FILE **rezultate, int nr)
-{
-  for (int i = 0; i < nr; i++)
-    fprintf(*rezultate, " ");
-}
+
 void meciuri(FILE **rezultate, Queue *q, Echipa **castigatori, Echipa **invinsi, int nr_echipe) /// pare sa  mearga(mai putin afisarea si eliminarea spatiilor)
 {
   Echipa *echipa1;
@@ -129,14 +136,10 @@ void meciuri(FILE **rezultate, Queue *q, Echipa **castigatori, Echipa **invinsi,
   {
     echipa1 = deQueue(q);
     echipa2 = deQueue(q);
-    /// verifica daca mai exista vreun spatiu la sfarsit si daca exista, elimina-l!
-    if (echipa1->nume_echipa[strlen(echipa1->nume_echipa) - 1] == ' ') ///'\n' a fost eliminat in Task1
-      echipa1->nume_echipa[strlen(echipa1->nume_echipa) - 1] = '\0';
-
-    if (echipa2->nume_echipa[strlen(echipa2->nume_echipa) - 1] == ' ') ///'\n' a fost eliminat in Task1
-      echipa2->nume_echipa[strlen(echipa2->nume_echipa) - 1] = '\0';
-
-    fprintf(*rezultate, "%s - %s\n", echipa1->nume_echipa, echipa2->nume_echipa); /// de revenit aici ///Afisarea
+    if (echipa1->nume_echipa[strlen(echipa1->nume_echipa)-1]=='\n')
+      echipa1->nume_echipa[strlen(echipa1->nume_echipa)-1]='\n';
+    fprintf(*rezultate,"%-33s-",echipa1->nume_echipa);
+    fprintf(*rezultate,"%33s\n",echipa2->nume_echipa); /// de revenit aici ///Afisarea
 
     if (echipa1->punctaj_total > echipa2->punctaj_total)
     {
@@ -156,51 +159,37 @@ void meciuri(FILE **rezultate, Queue *q, Echipa **castigatori, Echipa **invinsi,
 void Task3(char *argv, Echipa *lista_echipe, int nr_echipe, Echipa **ultimele8)
 {
   FILE *rezultate = fopen(argv, "at");
-
-  if (rezultate == NULL)
+    if (rezultate == NULL)
     eroare();
   Queue *q = createQueue();
-  Echipa *invinsi = NULL;
-  Echipa *castigatori = NULL;
+  Echipa *invinsi = NULL, *castigatori = NULL;
   for (Echipa *p = lista_echipe; p != NULL; p = p->next)
-  {
     enQueue(q, p);
-  }
-  /// pana aici e ok, functioneaza
-  /// de aici nu mai functioneaza
   int cnt_runda = 1;
   while (nr_echipe > 1)
-  {
-
-    fprintf(rezultate, "---Round %d:\n", cnt_runda);
+  { 
+    fprintf(rezultate, "\n--- Round %d:\n", cnt_runda);
     meciuri(&rezultate, q, &castigatori, &invinsi, nr_echipe);
     deleteStack(&invinsi);
     nr_echipe = nr_echipe / 2;
-    ///---afisarea
-    fprintf(rezultate, "---WINNERS OF ROUND NO:%d:\n", cnt_runda);
+    fprintf(rezultate, "\nWINNERS OF ROUND NO:%d\n", cnt_runda);
     int i = 0;
     Echipa *copie = castigatori;
-    while (i < nr_echipe) ///bug vechi SEGMENTATION FAULT
+    while (i < nr_echipe) /// bug vechi SEGMENTATION FAULT
     {
-      if (copie == NULL)
-      {
-        exit(100);
-      }
-      fprintf(rezultate, "%s -%f\n", copie->nume_echipa, copie->punctaj_total); 
-      /*if (nr_echipe == TOP_FINAL)
-         addAtBeginning(ultimele8, copie->nume_echipa, copie->nr_jucatori, copie->punctaj_total, copie->jucatori);*/
+      fprintf(rezultate, "%-34s-  %.2f\n",copie->nume_echipa, copie->punctaj_total);
+      if (nr_echipe == TOP_FINAL)
+        addAtBeginning(ultimele8, copie->nume_echipa, copie->nr_jucatori, copie->punctaj_total, copie->jucatori);
       copie = copie->next;
       i++;
     }
-    
-
     for (int i = 0; i < nr_echipe; i++)
     {
       Echipa *aux = pop(&castigatori);
       enQueue(q, aux);
     }
-
     cnt_runda++;
+    
   }
-  fclose(rezultate);
+   fclose(rezultate);
 }
