@@ -147,10 +147,7 @@ void meciuri(FILE **rezultate, Queue *q, Echipa **castigatori, Echipa **invinsi,
       echipa2->punctaj_total += 1.0;
       push(invinsi, echipa2); // invinsi/castigatori sunt de de tip Echipa **
     }
-    free(echipa1);
-    free(echipa2);
   }
-  deleteStack(invinsi);
 }
 
 void Task3(char *argv, Echipa *lista_echipe, int nr_echipe, Echipa **ultimele8)
@@ -159,7 +156,8 @@ printf("salut!");
     if (rezultate == NULL)
       eroare();
   Queue *q = createQueue();
-  
+  Echipa *invinsi = NULL;
+  Echipa *castigatori = NULL;
   for (Echipa *p = lista_echipe; p != NULL; p = p->next)
     {enQueue(q, p);
      printf("buna!");
@@ -170,14 +168,12 @@ printf("salut!");
    ///de aici nu mai functioneaza
   int cnt_runda = 1;
   while (nr_echipe > 1)
-  { Echipa *invinsi = NULL;
-    Echipa *castigatori = NULL;
-    printf("buna4!");
+  {
+    
     fprintf(rezultate, "Runda: %d", cnt_runda);
-    printf("buna3!");
     meciuri(&rezultate, q, &castigatori, &invinsi, nr_echipe);
     printf("buna!2");
-    /*deleteStack(&invinsi);*/
+    deleteStack(&invinsi);
     nr_echipe = nr_echipe / 2;
     ///---afisarea
     fprintf(rezultate, "---WINNERS OF ROUND NO:%d:\n", cnt_runda);
@@ -200,7 +196,6 @@ printf("salut!");
     }
     
     cnt_runda++;
-    free(castigatori);
   }
   fclose(rezultate);
 }
