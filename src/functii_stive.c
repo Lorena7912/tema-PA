@@ -28,7 +28,7 @@ Echipa *pop(Echipa **top)
     strcpy(aux->nume_echipa, temp->nume_echipa);
     aux->nr_jucatori = temp->nr_jucatori;
     aux->punctaj_total = temp->punctaj_total;
-    aux->jucatori = (Jucator *)malloc(aux->nr_jucatori * sizeof(Jucator));
+    aux->jucatori = (Jucator *)malloc(temp->nr_jucatori * sizeof(Jucator));
     aux->jucatori = temp->jucatori;
     aux->next = NULL; /// pentru a "izola elementul"
     (*top) = (*top)->next;
