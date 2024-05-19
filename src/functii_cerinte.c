@@ -6,6 +6,7 @@
 #include "../headers/functii_cozi.h"
 #include "../headers/altele.h"
 #include "../headers/functii_stive.h"
+#include "../headers/functii_BiT.h"
 #include <math.h>
 #define LUNGIME_MAXIMA 50
 #define TOP_FINAL 8
@@ -18,9 +19,9 @@ void elim_c(char *s)
 {
   int i = strlen(s);
   i--;
-  while ((s[i] == ' ' || s[i]=='\n' || s[i]=='\r') &&i >= 0)  ///!elimin si \r (cr),daca exista,altfel afecteaza afisarea meciurilor
+  while ((s[i] == ' ' || s[i] == '\n' || s[i] == '\r') && i >= 0) ///!elimin si \r (cr),daca exista,altfel afecteaza afisarea meciurilor
   {
-    s[i]='\0';
+    s[i] = '\0';
     i--;
   }
 }
@@ -40,7 +41,7 @@ Echipa *citeste_echipele(FILE **date, int *nr_echipe)
       eroare();
     }
     fgets(nume_echipa, LUNGIME_MAXIMA, *date);
-    elim_c(nume_echipa);///! linie importanta!
+    elim_c(nume_echipa); ///! linie importanta!
     for (int j = 0; j < nr_jucatori; j++)
     {
       char linie[LUNGIME_MAXIMA];
@@ -136,10 +137,10 @@ void meciuri(FILE **rezultate, Queue *q, Echipa **castigatori, Echipa **invinsi,
   {
     echipa1 = deQueue(q);
     echipa2 = deQueue(q);
-    if (echipa1->nume_echipa[strlen(echipa1->nume_echipa)-1]=='\n')
-      echipa1->nume_echipa[strlen(echipa1->nume_echipa)-1]='\n';
-    fprintf(*rezultate,"%-33s-",echipa1->nume_echipa);
-    fprintf(*rezultate,"%33s\n",echipa2->nume_echipa); /// de revenit aici ///Afisarea
+    if (echipa1->nume_echipa[strlen(echipa1->nume_echipa) - 1] == '\n')
+      echipa1->nume_echipa[strlen(echipa1->nume_echipa) - 1] = '\n';
+    fprintf(*rezultate, "%-33s-", echipa1->nume_echipa);
+    fprintf(*rezultate, "%33s\n", echipa2->nume_echipa); /// de revenit aici ///Afisarea
 
     if (echipa1->punctaj_total > echipa2->punctaj_total)
     {
@@ -159,7 +160,7 @@ void meciuri(FILE **rezultate, Queue *q, Echipa **castigatori, Echipa **invinsi,
 void Task3(char *argv, Echipa *lista_echipe, int nr_echipe, Echipa **ultimele8)
 {
   FILE *rezultate = fopen(argv, "at");
-    if (rezultate == NULL)
+  if (rezultate == NULL)
     eroare();
   Queue *q = createQueue();
   Echipa *invinsi = NULL, *castigatori = NULL;
@@ -167,7 +168,7 @@ void Task3(char *argv, Echipa *lista_echipe, int nr_echipe, Echipa **ultimele8)
     enQueue(q, p);
   int cnt_runda = 1;
   while (nr_echipe > 1)
-  { 
+  {
     fprintf(rezultate, "\n--- ROUND NO:%d\n", cnt_runda);
     meciuri(&rezultate, q, &castigatori, &invinsi, nr_echipe);
     deleteStack(&invinsi);
@@ -177,7 +178,7 @@ void Task3(char *argv, Echipa *lista_echipe, int nr_echipe, Echipa **ultimele8)
     Echipa *copie = castigatori;
     while (i < nr_echipe) /// bug vechi SEGMENTATION FAULT
     {
-      fprintf(rezultate, "%-34s-  %.2f\n",copie->nume_echipa, copie->punctaj_total);
+      fprintf(rezultate, "%-34s-  %.2f\n", copie->nume_echipa, copie->punctaj_total);
       if (nr_echipe == TOP_FINAL)
         addAtBeginning(ultimele8, copie->nume_echipa, copie->nr_jucatori, copie->punctaj_total, copie->jucatori);
       copie = copie->next;
@@ -189,7 +190,22 @@ void Task3(char *argv, Echipa *lista_echipe, int nr_echipe, Echipa **ultimele8)
       enQueue(q, aux);
     }
     cnt_runda++;
-    
   }
-   fclose(rezultate);
+  fclose(rezultate);
 }
+
+void Task4(char *argv, Echipa *ultimele8, BiTree **BTS)
+{
+  FILE *rezultate = fopen(argv, "at");
+  if (rezultate == NULL)
+    eroare();
+  while (ultimele8 != NULL)
+  {  
+    *BTS = insert(*BTS, ultimele8);
+    ultimele8 = ultimele8->next;
+  }
+  fprintf(rezultate, "\nTOP 8 TEAMS:\n");
+  afisare_BTS(&rezultate,*BTS);
+  fclose(rezultate);
+}
+

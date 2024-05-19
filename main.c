@@ -33,5 +33,8 @@ int main(int argc, char *argv[])
     Echipa *ultimele8=NULL;
     if (c[2] == 1)
         Task3(argv[3], lista_echipe, nr_echipe, &ultimele8);
+    BiTree *BTS=NULL;
+    if (c[3]==1)
+    Task4(argv[3],ultimele8,&BTS);
     return 0;
 }
