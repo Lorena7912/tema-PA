@@ -33,5 +33,4 @@ void afisare_BTS(FILE **rezultate,BiTree *node)
        fprintf(*rezultate, "%-34s-  %.2f\n", node->echipa->nume_echipa, node->echipa->punctaj_total);
        afisare_BTS(&*rezultate,node->left);
     }
-
 }
