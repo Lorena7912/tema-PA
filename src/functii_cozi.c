@@ -19,7 +19,7 @@ void enQueue(Queue *q, Echipa *echipa) ///verificata
     /// valori nou nod + next NULL
     /// daca nu exista niciun element in coada: q->rear (respecta FIFO ); altfel, (q->rear)->next primeste newNode si newnode devine q->rear
     /// daca exista un singur element in coada (q->front==NULL) q->front=q->rear (va intra mai intai pe else niciun element)
-    newNode->nume_echipa = (char *)malloc(LUNGIME_MAXIMA * sizeof(char));
+    newNode->nume_echipa = (char *)malloc((strlen(echipa->nume_echipa)+1)* sizeof(char));
     strcpy(newNode->nume_echipa, echipa->nume_echipa);
     newNode->nr_jucatori = echipa->nr_jucatori;
     newNode->punctaj_total = echipa->punctaj_total;
@@ -51,7 +51,7 @@ Echipa *deQueue(Queue *q) ///verificata
     Echipa *aux=q->front;
     ///atribuim lui val elementele lui q->front
     Echipa *val = (Echipa *)malloc(sizeof(Echipa));
-    val->nume_echipa = (char *)malloc(LUNGIME_MAXIMA * sizeof(char));
+    val->nume_echipa = (char *)malloc((strlen(aux->nume_echipa)+1)* sizeof(char));
     strcpy(val->nume_echipa, aux->nume_echipa);
     val->nr_jucatori = aux->nr_jucatori;
     val->punctaj_total = aux->punctaj_total;

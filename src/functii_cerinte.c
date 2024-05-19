@@ -18,7 +18,7 @@ void elim_c(char *s)
 {
   int i = strlen(s);
   i--;
-  while ((s[i] == ' ' || s[i]=='\n') &&i >= 0)
+  while ((s[i] == ' ' || s[i]=='\n' || s[i]=='\r') &&i >= 0)  ///!elimin si \r (cr),daca exista,altfel afecteaza afisarea meciurilor
   {
     s[i]='\0';
     i--;
@@ -168,7 +168,7 @@ void Task3(char *argv, Echipa *lista_echipe, int nr_echipe, Echipa **ultimele8)
   int cnt_runda = 1;
   while (nr_echipe > 1)
   { 
-    fprintf(rezultate, "\n--- Round %d:\n", cnt_runda);
+    fprintf(rezultate, "\n--- ROUND NO:%d\n", cnt_runda);
     meciuri(&rezultate, q, &castigatori, &invinsi, nr_echipe);
     deleteStack(&invinsi);
     nr_echipe = nr_echipe / 2;
