@@ -12,16 +12,26 @@ BiTree *newNode(Echipa *echipa)
     node->left = node->right = NULL;
     return node;
 }
+
+int mai_mic(Echipa *echipa1, Echipa *echipa2)
+{
+    return (echipa1->punctaj_total < echipa2->punctaj_total || 
+            (fabs(echipa1->punctaj_total - echipa2->punctaj_total) < 0.01 && strcmp(echipa1->nume_echipa, echipa2->nume_echipa) < 0));
+}
+
+int mai_mare(Echipa *echipa1, Echipa *echipa2)
+{
+    return (echipa1->punctaj_total > echipa2->punctaj_total ||
+            fabs(echipa1->punctaj_total - echipa2->punctaj_total) < 0.01 && strcmp(echipa1->nume_echipa, echipa2->nume_echipa) > 0);
+}
 BiTree *insert(BiTree *node, Echipa *echipa)
 {
     if (node == NULL)
         return newNode(echipa);
-    if (echipa->punctaj_total < node->echipa->punctaj_total ||
-        (fabs(echipa->punctaj_total - node->echipa->punctaj_total) < 0.01 && strcmp(echipa->nume_echipa, node->echipa->nume_echipa) < 0))
+    if (mai_mic(echipa, node->echipa))
         node->left = insert(node->left, echipa);
 
-    if (echipa->punctaj_total > node->echipa->punctaj_total ||
-        (fabs(echipa->punctaj_total - node->echipa->punctaj_total) < 0.01 && strcmp(echipa->nume_echipa, node->echipa->nume_echipa) > 0))
+    if (mai_mare(echipa, node->echipa))
         node->right = insert(node->right, echipa);
 
     return node;
@@ -44,15 +54,6 @@ int nodeHeight(AVLTree *root)
         return root->height;
 }
 
-int mai_mic(Echipa *echipa1, Echipa *echipa2)
-{
-    return (fabs(echipa1->punctaj_total - echipa2->punctaj_total) < 0.01 && strcmp(echipa1->nume_echipa, echipa2->nume_echipa) < 0);
-}
-
-int mai_mare(Echipa *echipa1, Echipa *echipa2)
-{
-    return (fabs(echipa1->punctaj_total - echipa2->punctaj_total) < 0.01 && strcmp(echipa1->nume_echipa, echipa2->nume_echipa) > 0);
-}
 int max(int a, int b)
 {
     return ((a > b) ? a : b);
@@ -92,6 +93,7 @@ AVLTree *RLRotation(AVLTree *Z)
 }
 AVLTree *insert_AVL(AVLTree *node, Echipa *echipa)
 {
+    printf("Buna!\n");
     if (node == NULL)
     {
         node = (AVLTree *)malloc(sizeof(AVLTree));
@@ -102,12 +104,14 @@ AVLTree *insert_AVL(AVLTree *node, Echipa *echipa)
     }
     if (echipa->punctaj_total < node->echipa->punctaj_total ||
         (fabs(echipa->punctaj_total - node->echipa->punctaj_total) < 0.01 && strcmp(echipa->nume_echipa, node->echipa->nume_echipa) < 0))
+    {
         node->left = insert_AVL(node->left, echipa);
+        /*printf("Nod stanga:%s\n",echipa->nume_echipa);*/
+    }
     else if (echipa->punctaj_total > node->echipa->punctaj_total ||
              (fabs(echipa->punctaj_total - node->echipa->punctaj_total) < 0.01 && strcmp(echipa->nume_echipa, node->echipa->nume_echipa) > 0))
         node->right = insert_AVL(node->right, echipa);
-    else
-        return node;
+
     node->height = 1 + max(nodeHeight(node->left), nodeHeight(node->right));
 
     int k = (nodeHeight(node->left) - nodeHeight(node->right));
@@ -118,7 +122,7 @@ AVLTree *insert_AVL(AVLTree *node, Echipa *echipa)
     if (k < -1 && mai_mare(echipa, node->right->echipa))
         return leftRotation(node);
 
-    if (k > 1 && mai_mare(echipa, node->right->echipa))
+    if (k > 1 && mai_mare(echipa, node->left->echipa))
         return LRRotation(node);
 
     if (k < -1 && mai_mic(echipa, node->right->echipa))
@@ -127,17 +131,17 @@ AVLTree *insert_AVL(AVLTree *node, Echipa *echipa)
     return node;
 }
 
-void afisare_nivel2(FILE **rezultate, AVLTree *root) 
-{  ///!de revenit cu o solutie propriu-zisa
+void afisare_nivel2(FILE **rezultate, AVLTree *root)
+{ ///!de revenit cu o solutie propriu-zisa
     AVLTree *aux1, *aux2;
-    aux1=root->left;
-    aux2=root->right;
-    if (aux1->left!=NULL)
-    fprintf(*rezultate,"%s\n",aux1->left->echipa->nume_echipa);
-    if (aux1->right!=NULL)
-    fprintf(*rezultate,"%s\n",aux1->right->echipa->nume_echipa);
-    if (aux2->left!=NULL)
-    fprintf(*rezultate,"%s\n",aux2->left->echipa->nume_echipa);
-    if (aux2->right!=NULL)
-    fprintf(*rezultate,"%s\n",aux2->right->echipa->nume_echipa);
+    aux1 = root->left;
+    aux2 = root->right;
+    if (aux1->left != NULL)
+        fprintf(*rezultate, "%s\n", aux1->left->echipa->nume_echipa);
+    if (aux1->right != NULL)
+        fprintf(*rezultate, "%s\n", aux1->right->echipa->nume_echipa);
+    if (aux2->left != NULL)
+        fprintf(*rezultate, "%s\n", aux2->left->echipa->nume_echipa);
+    if (aux2->right != NULL)
+        fprintf(*rezultate, "%s\n", aux2->right->echipa->nume_echipa);
 }
