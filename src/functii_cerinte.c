@@ -200,12 +200,24 @@ void Task4(char *argv, Echipa *ultimele8, BiTree **BTS)
   if (rezultate == NULL)
     eroare();
   while (ultimele8 != NULL)
-  {  
+  {
     *BTS = insert(*BTS, ultimele8);
     ultimele8 = ultimele8->next;
   }
   fprintf(rezultate, "\nTOP 8 TEAMS:\n");
-  afisare_BTS(&rezultate,*BTS);
+  afisare_BTS(&rezultate, *BTS);
   fclose(rezultate);
 }
 
+void Task5(char *argv,Echipa *ultimele8,AVLTree **AVL)
+{
+  FILE *rezultate = fopen(argv, "at");
+  if (rezultate == NULL)
+    eroare();
+  for (Echipa *p=ultimele8;p!=NULL;p=p->next)
+     *AVL=insert_AVL(*AVL,p);
+
+  fprintf(rezultate, "\nTHE LEVEL 2 TEAMS ARE:\n");
+  afisare_nivel2(&rezultate,*AVL);
+  fclose(rezultate);
+}

@@ -2,6 +2,7 @@ typedef struct Jucator Jucator;
 typedef struct Echipa Echipa;
 typedef struct Queue Queue;
 typedef struct BiTree BiTree;
+typedef struct AVLTree AVLTree;
 struct  Jucator
 {
     char *prenume;
@@ -26,4 +27,10 @@ struct Queue
 struct BiTree
 { Echipa *echipa;
  struct BiTree *left, *right;
+};
+
+struct AVLTree
+{ Echipa *echipa;
+  int height;
+ struct AVLTree *left,*right;
 };

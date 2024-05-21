@@ -64,3 +64,4 @@ Echipa *deQueue(Queue *q) ///verificata
     return val;
 
 }
+

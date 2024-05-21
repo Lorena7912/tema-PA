@@ -36,5 +36,8 @@ int main(int argc, char *argv[])
     BiTree *BTS=NULL;
     if (c[3]==1)
     Task4(argv[3],ultimele8,&BTS);
+    AVLTree *AVL=NULL;
+    if (c[4]==1)
+    Task5(argv[3],ultimele8,&AVL);
     return 0;
 }
