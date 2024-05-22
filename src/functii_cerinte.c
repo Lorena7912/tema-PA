@@ -216,7 +216,6 @@ void Task5(char *argv,Echipa *ultimele8,AVLTree **AVL)
     eroare();
   for (Echipa *p=ultimele8;p!=NULL;p=p->next)
      *AVL=insert_AVL(*AVL,p);
-
   fprintf(rezultate, "\nTHE LEVEL 2 TEAMS ARE:\n");
   afisare_nivel2(&rezultate,*AVL);
   fclose(rezultate);
