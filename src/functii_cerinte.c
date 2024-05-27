@@ -11,7 +11,7 @@
 #define LUNGIME_MAXIMA 50
 #define TOP_FINAL 8
 void eroare()
-{ /// revenit la aceasta functie
+{ 
   printf("Eroare");
   exit(1);
 }
@@ -36,10 +36,8 @@ Echipa *citeste_echipele(FILE **date, int *nr_echipe)
     fscanf(*date, "%d ", &nr_jucatori);
     Jucator *aux = (Jucator *)malloc(nr_jucatori * sizeof(Jucator));
     if (aux == NULL)
-    {
-      printf("4");
-      eroare();
-    }
+        eroare();
+
     fgets(nume_echipa, LUNGIME_MAXIMA, *date);
     elim_c(nume_echipa); ///! linie importanta!
     for (int j = 0; j < nr_jucatori; j++)
@@ -48,19 +46,17 @@ Echipa *citeste_echipele(FILE **date, int *nr_echipe)
       aux[j].nume = (char *)malloc(LUNGIME_MAXIMA * sizeof(char));
       aux[j].prenume = (char *)malloc(LUNGIME_MAXIMA * sizeof(char));
       if (aux[j].nume == NULL || aux[j].prenume == NULL)
-      {
-        printf("5");
-        eroare();
-      }
+          eroare();
+
       fscanf(*date, "%s ", aux[j].nume);
       fscanf(*date, "%s ", aux[j].prenume);
       fscanf(*date, "%d", &aux[j].puncte);
-      /*getc(*date);*/
+  
     }
-    getc(*date); // posibil bug: numele echipelor au la sfarsit '\n'
+    getc(*date); 
 
     addAtBeginning(&lista_echipe, nume_echipa, nr_jucatori, 0.0, aux);
-    free(aux); // momentan; plan:creezi o functie care elibereaza spatiul pentru tot, inclusiv memoria alocata pentru nume si prenume;
+    free(aux); 
   }
   return lista_echipe;
 }
@@ -72,8 +68,7 @@ void Task1(char *argv, Echipa *lista_echipe)
     eroare();
   for (Echipa *p = lista_echipe; p != NULL; p = p->next)
   {
-    /*p->nume_echipa[strlen(p->nume_echipa) - 1] = '\0';*/ ///!sa nu fie stearsa!!!! duce la picarea tuturor testelor prin neafisarea corecta!*/
-    /*elim_c(p->nume_echipa);///sau cu aceasta functie*/
+    
     fprintf(rezultate, "%s\n", p->nume_echipa);
   }
   fclose(rezultate);
@@ -129,7 +124,7 @@ void Task2(char *argv, Echipa **lista_echipa, int *nr_echipe)
   fclose(rezultate); /// foarte important!
 }
 
-void meciuri(FILE **rezultate, Queue *q, Echipa **castigatori, Echipa **invinsi, int nr_echipe) /// pare sa  mearga(mai putin afisarea si eliminarea spatiilor)
+void meciuri(FILE **rezultate, Queue *q, Echipa **castigatori, Echipa **invinsi, int nr_echipe) 
 {
   Echipa *echipa1;
   Echipa *echipa2;
@@ -140,7 +135,7 @@ void meciuri(FILE **rezultate, Queue *q, Echipa **castigatori, Echipa **invinsi,
     if (echipa1->nume_echipa[strlen(echipa1->nume_echipa) - 1] == '\n')
       echipa1->nume_echipa[strlen(echipa1->nume_echipa) - 1] = '\n';
     fprintf(*rezultate, "%-33s-", echipa1->nume_echipa);
-    fprintf(*rezultate, "%33s\n", echipa2->nume_echipa); /// de revenit aici ///Afisarea
+    fprintf(*rezultate, "%33s\n", echipa2->nume_echipa);
 
     if (echipa1->punctaj_total > echipa2->punctaj_total)
     {
@@ -176,7 +171,7 @@ void Task3(char *argv, Echipa *lista_echipe, int nr_echipe, Echipa **ultimele8)
     fprintf(rezultate, "\nWINNERS OF ROUND NO:%d\n", cnt_runda);
     int i = 0;
     Echipa *copie = castigatori;
-    while (i < nr_echipe) /// bug vechi SEGMENTATION FAULT
+    while (i < nr_echipe) 
     {
       fprintf(rezultate, "%-34s-  %.2f\n", copie->nume_echipa, copie->punctaj_total);
       if (nr_echipe == TOP_FINAL)
@@ -215,8 +210,9 @@ void Task5(char *argv,Echipa *ultimele8,AVLTree **AVL)
   if (rezultate == NULL)
     eroare();
   for (Echipa *p=ultimele8;p!=NULL;p=p->next)
-     *AVL=insert_AVL(*AVL,p);
-  fprintf(rezultate, "\nTHE LEVEL 2 TEAMS ARE:\n");
+     {*AVL=insert_AVL(*AVL,p);
+     }
+  fprintf(rezultate, "\nTHE LEVEL 2 TEAMS ARE:\n"); 
   afisare_nivel2(&rezultate,*AVL);
   fclose(rezultate);
 }

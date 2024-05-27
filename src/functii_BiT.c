@@ -50,7 +50,7 @@ void afisare_BTS(FILE **rezultate, BiTree *node)
 int nodeHeight(AVLTree *root)
 {
     if (root == NULL)
-        return -1;
+        return 1;
     else
         return root->height;
 }
@@ -63,10 +63,10 @@ AVLTree *rightRotation(AVLTree *z)
 {
     AVLTree *y = z->left;
     AVLTree *T3 = y->right;
-    // roteste
+
     y->right = z;
     z->left = T3;
-    // modifica inaltimile pentru z si y
+
     z->height = max(nodeHeight(z->left), nodeHeight(z->right)) + 1;
     y->height = max(nodeHeight(y->left), nodeHeight(y->right)) + 1;
     return y;
@@ -94,7 +94,7 @@ AVLTree *RLRotation(AVLTree *Z)
 }
 AVLTree *insert_AVL(AVLTree *node, Echipa *echipa)
 {
-   
+
     if (node == NULL)
     {
         node = (AVLTree *)malloc(sizeof(AVLTree));
@@ -106,7 +106,6 @@ AVLTree *insert_AVL(AVLTree *node, Echipa *echipa)
     if (mai_mic(echipa, node->echipa))
     {
         node->left = insert_AVL(node->left, echipa);
-        
     }
     else if (mai_mare(echipa, node->echipa))
         node->right = insert_AVL(node->right, echipa);
@@ -127,12 +126,12 @@ AVLTree *insert_AVL(AVLTree *node, Echipa *echipa)
 
     if (k < -1 && mai_mic(echipa, node->right->echipa))
         return RLRotation(node);
-
+    
     return node;
 }
 
 void afisare_nivel2(FILE **rezultate, AVLTree *root)
-{ ///!momentan
+{ 
     AVLTree *aux1, *aux2;
     aux1 = root->left;
     aux2 = root->right;

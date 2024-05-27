@@ -11,16 +11,10 @@ int main(int argc, char *argv[])
     FILE *cerinte, *date;
     cerinte = fopen(argv[1], "rt");
     if (cerinte == NULL)
-    {
-        printf("1");
         eroare();
-    }
     date = fopen(argv[2], "rt");
     if (date == NULL)
-    {
-        printf("2");
         eroare();
-    }
     int c[NR_CERINTE];
     for (int i = 0; i < NR_CERINTE; i++)
         fscanf(cerinte, "%d", &c[i]);

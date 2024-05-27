@@ -17,7 +17,7 @@ void push(Echipa **top, Echipa *echipa)
     *top = newNode;
 }
 
-// deleteStack si pop
+
 Echipa *pop(Echipa **top)
 {
     if ((*top)==NULL)
@@ -30,7 +30,7 @@ Echipa *pop(Echipa **top)
     aux->punctaj_total = temp->punctaj_total;
     aux->jucatori = (Jucator *)malloc(temp->nr_jucatori * sizeof(Jucator));
     aux->jucatori = temp->jucatori;
-    aux->next = NULL; /// pentru a "izola elementul"
+    aux->next = NULL; 
     (*top) = (*top)->next;
     free(temp);
     return aux;
