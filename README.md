@@ -12,4 +12,4 @@ Fișierele c.in conțin o linie cu 5 cifre de 0 sau 1, unde 0 înseamnă neefect
 -ordonează ultimele 8 echipele într-un  arbore BST și le afișează în ordine descrescătoare (Task4)
 -realizează un arbore AVL cu ultimele 8 echipe și afișează nivelul 2 (Task5)
 
-Funcția void elim_c(char *s) elimină începând de la sfârșitul numelui unei echipe caracterele nedorite (spațiu, '\r', '\n') care pot apărea în șirul de caractere ca urmare a citirii numelui echipei cu funcția fgetc.
+Funcția void elim_c(char *s) elimină începând de la sfârșitul numelui unei echipe caracterele nedorite (spațiu, '\r', '\n') care pot apărea în șirul de caractere ca urmare a citirii numelui echipei cu funcția fgets.
